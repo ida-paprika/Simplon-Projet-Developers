@@ -14,52 +14,47 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import fr.formation.developers.domain.Developer;
+import fr.formation.developers.domain.DeveloperCreate;
+import fr.formation.developers.domain.DeveloperUpdate;
 
 @RestController
 @RequestMapping("/developers")
 public class DeveloperController {
 
-	private HashMap<String, Developer> arrayDeveloper = new HashMap<String, Developer>();
-	
 	@PostMapping
-	public void create(@Valid @RequestBody Developer developer) {
-		arrayDeveloper.put(developer.getNickName(), developer);
+	public void create(@Valid @RequestBody DeveloperCreate developer) {
 		System.out.println(developer);
 	}
 	
 	@GetMapping("/{nickName}")
-	public Developer getByNickName(@PathVariable("nickName") String nickName) {
-		Developer developer = null;
-		for (String n : arrayDeveloper.keySet()) {
-			if (n.equalsIgnoreCase(nickName)) {
-				developer = arrayDeveloper.get(n);
-			}
-		}
+	public DeveloperCreate getByNickName(@PathVariable("nickName") String pseudo) {
+		DeveloperCreate developer = new DeveloperCreate();
+		developer.setPseudo(pseudo);
+		developer.setFirstName("Bilbo");
+		developer.setLastName("BAGGINS");
+		LocalDate date = LocalDate.of(1752, 12, 01);
+		developer.setBirthDate(date);
 		return developer;
 	}
 	
 	// "Patch" modifie partiellement une ressource
 	// 		-- "Put" créé ou modifie en fonction de l'existence ou non des données (rarement utilisé car peu spécifique)
 	@PatchMapping("/{nickName}/birth-date")
-	public void updateBirthDate(@PathVariable("nickName") String nickName, 
-			@Valid @RequestBody Developer partial) {
-		Developer developer = this.getByNickName(nickName);
-//		developer.setBirthDate(LocalDate.of(1500, 04, 01));
-		developer.setBirthDate(partial.getBirthDate());
-		System.out.println(developer);
+	public void updateBirthDate(@PathVariable("nickName") String pseudo, 
+			@Valid @RequestBody DeveloperUpdate partial) {
+//		System.out.println("Partial object=" + partial);
+//		DeveloperCreate developer = new DeveloperCreate();
+//		developer.setPseudo(pseudo);
+//		developer.setFirstName(partial.getFirstName());
+//		developer.setLastName("MARSHALL");
+//		developer.setBirthDate(partial.getBirthDate());
+		System.out.println("Update birth date of '"+pseudo
+				+"' with new date '"+partial.getBirthDate()+"'");
 	}
 	
 	@DeleteMapping("/delete/{nickName}")
-	public void delete(@PathVariable("nickName") String nickName) {
-		for (String n : arrayDeveloper.keySet()) {
-			if (n.equalsIgnoreCase(nickName)) {
-				arrayDeveloper.remove(n);
-				System.out.println("Développeur '" + nickName + "' éradiqué");
-			} else {
-				System.out.println("Développeur '" + nickName + "' inconnu");
-			}
-		}
+	public void delete(@PathVariable("nickName") String pseudo) {
+		System.out.println("Développeur '" + pseudo + "' éradiqué è_é");
 	}
 	
 

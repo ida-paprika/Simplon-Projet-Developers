@@ -4,10 +4,12 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
+import fr.formation.developers.validation.Uppercase;
+
 
 public class Skill {
 	
-	@NotEmpty @NotBlank @Size(min = 3, max = 20)
+	@NotEmpty @NotBlank @Size(min = 3, max = 20) @Uppercase
 	private String name;
 	
 	

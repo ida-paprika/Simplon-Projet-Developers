@@ -25,7 +25,6 @@ public class SkillController {
 	
 	@PostMapping
 	public void create(@Valid @RequestBody Skill skill) {
-
 		System.out.println(skill);
 	}
 	
