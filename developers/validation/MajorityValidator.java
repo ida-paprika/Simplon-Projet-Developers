@@ -1,23 +1,25 @@
 package fr.formation.developers.validation;
 
 import java.time.LocalDate;
-import java.time.Period;
+//import java.time.Period;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
-public class MajorityValidator implements ConstraintValidator<Majority, LocalDate> {
+public class MajorityValidator
+	implements ConstraintValidator<Majority, LocalDate> {
 
-	@Override
-	public boolean isValid(LocalDate value, ConstraintValidatorContext context) {
-		if (value == null) {
-			return true;
-		}
-		
-        LocalDate today = LocalDate.now();
-        LocalDate majorDate = today.minusYears(18);
-        
-        return value.isBefore(majorDate);
+    @Override
+    public boolean isValid(LocalDate value,
+	    ConstraintValidatorContext context) {
+	if (value == null) {
+	    return true;
+	}
+
+	LocalDate today = LocalDate.now();
+	LocalDate majorityDate = today.minusYears(18);
+
+	return value.isBefore(majorityDate);
 
 //        Period period = Period.between(value, today);
 //
@@ -26,6 +28,6 @@ public class MajorityValidator implements ConstraintValidator<Majority, LocalDat
 //        }
 //        
 //		return true;
-	}
+    }
 
 }

@@ -14,10 +14,10 @@ import javax.validation.Payload;
 @Constraint(validatedBy = { UppercaseValidator.class })
 public @interface Uppercase {
 
-	String message() default "Ce champ doit être en majuscules";
+    String message() default "Ce champ doit être en majuscules";
 
-	Class<?>[] groups() default { };
+    Class<?>[] groups() default {};
 
-	Class<? extends Payload>[] payload() default { };
-	
+    Class<? extends Payload>[] payload() default {};
+
 }

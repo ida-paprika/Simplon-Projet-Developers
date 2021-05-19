@@ -1,8 +1,5 @@
 package fr.formation.developers.controllers;
 
-import java.time.LocalDate;
-import java.util.HashMap;
-
 import javax.validation.Valid;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -14,50 +11,48 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import fr.formation.developers.domain.DeveloperCreate;
-import fr.formation.developers.domain.DeveloperUpdate;
+import fr.formation.developers.domain.dtos.DeveloperCreate;
+import fr.formation.developers.domain.dtos.DeveloperUpdateBirthDate;
+import fr.formation.developers.domain.dtos.DeveloperView;
+import fr.formation.developers.services.DeveloperService;
 
 @RestController
 @RequestMapping("/developers")
 public class DeveloperController {
 
-	@PostMapping
-	public void create(@Valid @RequestBody DeveloperCreate developer) {
-		System.out.println(developer);
-	}
-	
-	@GetMapping("/{nickName}")
-	public DeveloperCreate getByNickName(@PathVariable("nickName") String pseudo) {
-		DeveloperCreate developer = new DeveloperCreate();
-		developer.setPseudo(pseudo);
-		developer.setFirstName("Bilbo");
-		developer.setLastName("BAGGINS");
-		LocalDate date = LocalDate.of(1752, 12, 01);
-		developer.setBirthDate(date);
-		return developer;
-	}
-	
-	// "Patch" modifie partiellement une ressource
-	// 		-- "Put" créé ou modifie en fonction de l'existence ou non des données (rarement utilisé car peu spécifique)
-	@PatchMapping("/{nickName}/birth-date")
-	public void updateBirthDate(@PathVariable("nickName") String pseudo, 
-			@Valid @RequestBody DeveloperUpdate partial) {
-//		System.out.println("Partial object=" + partial);
-//		DeveloperCreate developer = new DeveloperCreate();
-//		developer.setPseudo(pseudo);
-//		developer.setFirstName(partial.getFirstName());
-//		developer.setLastName("MARSHALL");
-//		developer.setBirthDate(partial.getBirthDate());
-		System.out.println("Update birth date of '"+pseudo
-				+"' with new date '"+partial.getBirthDate()+"'");
-	}
-	
-	@DeleteMapping("/delete/{nickName}")
-	public void delete(@PathVariable("nickName") String pseudo) {
-		System.out.println("Développeur '" + pseudo + "' éradiqué è_é");
-	}
-	
+    private final DeveloperService service;
 
+    public DeveloperController(DeveloperService service) {
+	this.service = service;
+    }
 
-	
+    @PostMapping
+    public void create(@Valid @RequestBody DeveloperCreate developer) {
+	System.out.println("CONTROLLER CREATE");
+	System.out.println(developer);
+	service.create(developer);
+    }
+
+    @GetMapping("/{pseudo}")
+    public DeveloperView getByPseudo(@PathVariable("pseudo") String pseudo) {
+	System.out.println("CONTROLLER GET");
+	return service.getByPseudo(pseudo);
+    }
+
+    // "Patch" modifie partiellement une ressource
+    // -- "Put" créé ou modifie en fonction de l'existence ou non des données
+    // (rarement utilisé car peu spécifique)
+    @PatchMapping("/{pseudo}/birth-date")
+    public void updateBirthDate(@PathVariable("pseudo") String pseudo,
+	    @Valid @RequestBody DeveloperUpdateBirthDate partial) {
+	System.out.println("CONTROLLER UPDATE");
+	service.updateBirthDate(pseudo, partial);
+    }
+
+    @DeleteMapping("/delete/{pseudo}")
+    public void delete(@PathVariable("pseudo") String pseudo) {
+	System.out.println("CONTROLLER DELETE");
+	service.delete(pseudo);
+    }
+
 }

@@ -1,6 +1,6 @@
 package fr.formation.developers.validation;
 
-import static java.lang.annotation.ElementType.FIELD;
+import static java.lang.annotation.ElementType.TYPE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 import java.lang.annotation.Retention;
@@ -10,13 +10,18 @@ import javax.validation.Constraint;
 import javax.validation.Payload;
 
 @Retention(RUNTIME)
-@Target(FIELD)
-@Constraint(validatedBy = { MajorityValidator.class })
-public @interface Majority {
+@Target(TYPE)
+@Constraint(validatedBy = { DifferentValuesValidator.class })
+public @interface DifferentValues {
 
-    String message() default "Vous devez être majeur";
+    String message() default "Ces champs doivent être différents";
 
     Class<?>[] groups() default {};
 
     Class<? extends Payload>[] payload() default {};
+
+//    String firstField();
+// 
+//    String secondField();
+
 }
