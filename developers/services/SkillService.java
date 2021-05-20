@@ -7,6 +7,12 @@ public interface SkillService {
 
     SkillView getById(Long id);
 
-    void create(SkillCreate skill);
+    void create(SkillCreate dto);
+
+    void delete(Long id);
+
+    void update(Long id, SkillCreate dto);
+
+    SkillView getByName(String name);
 
 }

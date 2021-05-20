@@ -4,6 +4,7 @@ import javax.validation.Valid;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -28,19 +29,28 @@ public class SkillController {
 
     @GetMapping("/{id}")
     public SkillView getById(@PathVariable("id") Long id) {
-	System.out.println("call in controller");
 	return service.getById(id);
     }
 
-    @PostMapping
-    public void create(@Valid @RequestBody SkillCreate skill) {
-	System.out.println("[Controller] " + skill);
-	service.create(skill);
+    @GetMapping("/{name}/by-name")
+    public SkillView getByName(@PathVariable("name") String name) {
+	return service.getByName(name);
     }
 
-    @DeleteMapping("/delete/{id}")
+    @PostMapping
+    public void create(@Valid @RequestBody SkillCreate dto) {
+	service.create(dto);
+    }
+
+    @PatchMapping("/{id}/update")
+    public void update(@PathVariable("id") Long id,
+	    @Valid @RequestBody SkillCreate dto) {
+	service.update(id, dto);
+    }
+
+    @DeleteMapping("/{id}/delete")
     public void delete(@PathVariable("id") Long id) {
-	System.out.println("Compétence n°" + id + " supprimée");
+	service.delete(id);
     }
 
 }

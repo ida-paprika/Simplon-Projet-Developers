@@ -4,11 +4,14 @@ import java.time.LocalDate;
 
 import javax.validation.Valid;
 
+import org.springframework.stereotype.Service;
+
 import fr.formation.developers.domain.dtos.ProjectCreate;
 import fr.formation.developers.domain.dtos.ProjectEndDate;
 import fr.formation.developers.domain.dtos.ProjectUpdate;
 import fr.formation.developers.domain.dtos.ProjectView;
 
+@Service
 public class ProjectServiceImpl implements ProjectService {
 
     @Override
