@@ -12,31 +12,30 @@ public class SkillServiceImpl implements SkillService {
 
     private final SkillRepository repo;
 
-    public SkillServiceImpl(SkillRepository repository) {
-	this.repo = repository;
+    public SkillServiceImpl(SkillRepository repo) {
+	this.repo = repo;
     }
 
     @Override
     public void create(SkillCreate dto) {
-	Skill skill = new Skill();
-	skill.setName(dto.getName());
-	repo.save(skill);
+	Skill entity = new Skill();
+	entity.setName(dto.getName());
+	repo.save(entity);
     }
 
     @Override
     public SkillView getById(Long id) {
-	Skill skill = repo.findById(id).get();
+	Skill entity = repo.findById(id).get();
 	SkillView view = new SkillView();
-	view.setName(skill.getName());
+	view.setName(entity.getName());
 	return view;
     }
 
     @Override
     public void update(Long id, SkillCreate dto) {
-	Skill skill = repo.findById(id).get();
-	System.out.println(skill);
-	skill.setName(dto.getName());
-
+	Skill entity = repo.findById(id).get();
+	entity.setName(dto.getName());
+	repo.save(entity);
     }
 
     @Override
@@ -46,9 +45,9 @@ public class SkillServiceImpl implements SkillService {
 
     @Override
     public SkillView getByName(String name) {
-	Skill skill = repo.findByName(name).get();
+	Skill entity = repo.findByName(name).get();
 	SkillView view = new SkillView();
-	view.setName(skill.getName());
+	view.setName(entity.getName());
 	return view;
     }
 

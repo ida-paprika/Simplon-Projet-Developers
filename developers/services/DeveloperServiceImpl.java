@@ -1,53 +1,73 @@
 package fr.formation.developers.services;
 
-import java.time.LocalDate;
-
 import org.springframework.stereotype.Service;
 
 import fr.formation.developers.domain.dtos.DeveloperCreate;
 import fr.formation.developers.domain.dtos.DeveloperUpdateBirthDate;
 import fr.formation.developers.domain.dtos.DeveloperView;
+import fr.formation.developers.domain.dtos.IDeveloperView;
+import fr.formation.developers.domain.entities.Developer;
+import fr.formation.developers.repositories.DeveloperRepository;
 
 @Service
 public class DeveloperServiceImpl implements DeveloperService {
 
+    private final DeveloperRepository repo;
+
+    public DeveloperServiceImpl(DeveloperRepository repo) {
+	this.repo = repo;
+    }
+
     @Override
-    public void create(DeveloperCreate developer) {
-	System.out.println("SERVICE CREATE");
-	System.out.println(developer);
+    public void create(DeveloperCreate dto) {
+	Developer entity = new Developer();
+	entity.setPseudo(dto.getPseudo());
+	entity.setFirstName(dto.getFirstName());
+	entity.setLastName(dto.getLastName());
+	entity.setBirthDate(dto.getBirthDate());
+	repo.save(entity);
+    }
+
+    @Override
+    public DeveloperView getById(Long id) {
+	Developer entity = repo.findById(id).get();
+	DeveloperView view = new DeveloperView();
+	view.setPseudo(entity.getPseudo());
+	view.setFirstName(entity.getFirstName());
+	view.setLastName(entity.getLastName());
+	view.setBirthDate(entity.getBirthDate());
+	return view;
     }
 
     @Override
     public DeveloperView getByPseudo(String pseudo) {
-	DeveloperView developer = new DeveloperView();
-	developer.setPseudo(pseudo);
-	developer.setFirstName("Bilbo");
-	developer.setLastName("BAGGINS");
-	LocalDate date = LocalDate.of(1752, 12, 01);
-	developer.setBirthDate(date);
-	System.out.println("SERVICE GET");
-	System.out.println(developer);
-	return developer;
+	Developer entity = repo.findByPseudo(pseudo).get();
+	DeveloperView view = new DeveloperView();
+	view.setPseudo(entity.getPseudo());
+	view.setFirstName(entity.getFirstName());
+	view.setLastName(entity.getLastName());
+	view.setBirthDate(entity.getBirthDate());
+	return view;
     }
 
     @Override
-    public void updateBirthDate(String pseudo,
-	    DeveloperUpdateBirthDate partial) {
-//	System.out.println("Partial object=" + partial);
-//	DeveloperCreate developer = new DeveloperCreate();
-//	developer.setPseudo(pseudo);
-//	developer.setFirstName(partial.getFirstName());
-//	developer.setLastName("MARSHALL");
-//	developer.setBirthDate(partial.getBirthDate());
-	System.out.println("SERVICE UPDATE");
-	System.out.println("Update birth date of '" + pseudo
-		+ "' with new date '" + partial.getBirthDate() + "'");
+    public void updateBirthDate(Long id, DeveloperUpdateBirthDate partial) {
+	Developer entity = repo.findById(id).get();
+	entity.setBirthDate(partial.getBirthDate());
+	repo.save(entity);
     }
 
     @Override
-    public void delete(String pseudo) {
-	System.out.println("SERVICE DELETE");
-	System.out.println("Développeur '" + pseudo + "' éradiqué è_é");
+    public void delete(Long id) {
+	repo.deleteById(id);
+    }
+
+    @Override
+    public IDeveloperView find() {
+	String firstName = "Bilbo";
+	String lastName = "Baggins";
+	return repo.findByFirstNameAndLastName(firstName, lastName).get();
+
     }
 
 }

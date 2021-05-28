@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import fr.formation.developers.domain.dtos.DeveloperCreate;
 import fr.formation.developers.domain.dtos.DeveloperUpdateBirthDate;
 import fr.formation.developers.domain.dtos.DeveloperView;
+import fr.formation.developers.domain.dtos.IDeveloperView;
 import fr.formation.developers.services.DeveloperService;
 
 @RestController
@@ -27,32 +28,37 @@ public class DeveloperController {
     }
 
     @PostMapping
-    public void create(@Valid @RequestBody DeveloperCreate developer) {
-	System.out.println("CONTROLLER CREATE");
-	System.out.println(developer);
-	service.create(developer);
+    public void create(@Valid @RequestBody DeveloperCreate dto) {
+	service.create(dto);
     }
 
-    @GetMapping("/{pseudo}")
+    @GetMapping("/{id}")
+    public DeveloperView getById(@PathVariable("id") Long id) {
+	return service.getById(id);
+    }
+
+    @GetMapping("/{pseudo}/by-pseudo")
     public DeveloperView getByPseudo(@PathVariable("pseudo") String pseudo) {
-	System.out.println("CONTROLLER GET");
 	return service.getByPseudo(pseudo);
     }
 
     // "Patch" modifie partiellement une ressource
     // -- "Put" créé ou modifie en fonction de l'existence ou non des données
     // (rarement utilisé car peu spécifique)
-    @PatchMapping("/{pseudo}/birth-date")
-    public void updateBirthDate(@PathVariable("pseudo") String pseudo,
+    @PatchMapping("/{id}/birth-date")
+    public void updateBirthDate(@PathVariable("id") Long id,
 	    @Valid @RequestBody DeveloperUpdateBirthDate partial) {
-	System.out.println("CONTROLLER UPDATE");
-	service.updateBirthDate(pseudo, partial);
+	service.updateBirthDate(id, partial);
     }
 
-    @DeleteMapping("/delete/{pseudo}")
-    public void delete(@PathVariable("pseudo") String pseudo) {
-	System.out.println("CONTROLLER DELETE");
-	service.delete(pseudo);
+    @GetMapping("/find")
+    public IDeveloperView find() {
+	return service.find();
+    }
+
+    @DeleteMapping("/{id}/delete")
+    public void delete(@PathVariable("id") Long id) {
+	service.delete(id);
     }
 
 }
